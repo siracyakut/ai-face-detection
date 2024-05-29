@@ -1,0 +1,3 @@
+# AI Face Detection with React and TensorFlow
+
+Proje web tabanlıdır. Temelde HTML, TailwindCSS, ReactJS, NodeJS kullanılmıştır. Projede yardımcı AI paketleri olarak face-api.js ve TensorFlow.js kullanılmıştır. Mobil, masaüstü, tablet vb. tüm cihazlarla uyumlu bir arayüze sahiptir. Servis hem resim aracılığıyla hem de canlı kamera üzerinden yüz tanıması yapabilmektedir. Ayrıca tanınan yüzün duygu durumunu, cinsiyet ve yaş tahminini yapabilme, yüz hatlarını çizme gibi becerilere sahiptir.

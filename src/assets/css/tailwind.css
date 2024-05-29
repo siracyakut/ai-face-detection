@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    @apply h-full bg-[#303030] text-white;
+  }
+
+  .link {
+    @apply text-zinc-300 hover:text-blue-400 transition-colors;
+  }
+}
