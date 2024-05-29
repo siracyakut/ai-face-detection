@@ -129,10 +129,11 @@ export default function CameraPage() {
     }
   };
 
-  const handleVideo = (video, canvas) => {
+  const handleVideo = async (video, canvas) => {
     if (!video || video.paused) return;
+
     const t0 = performance.now();
-    faceapi
+    const detections = await faceapi
       .detectAllFaces(
         video,
         new faceapi.SsdMobilenetv1Options({
@@ -142,15 +143,21 @@ export default function CameraPage() {
       )
       .withFaceLandmarks()
       .withFaceExpressions()
-      .withAgeAndGender()
-      .then((result) => {
-        const fps = 1000 / (performance.now() - t0);
-        drawFaces(canvas, result, fps.toLocaleString());
-        requestAnimationFrame(() => handleVideo(video, canvas));
-      })
-      .catch((err) => {
-        console.log(`Detect Error: ${String(err)}`);
-      });
+      .withAgeAndGender();
+
+    faceapi.matchDimensions(webcamRef.current, {
+      width: video.clientWidth,
+      height: video.clientHeight,
+    });
+
+    const resized = faceapi.resizeResults(detections, {
+      width: video.clientWidth,
+      height: video.clientHeight,
+    });
+
+    const fps = 1000 / (performance.now() - t0);
+    drawFaces(canvas, resized, fps.toLocaleString());
+    requestAnimationFrame(() => handleVideo(video, canvas));
   };
 
   const resizeCanvas = async () => {

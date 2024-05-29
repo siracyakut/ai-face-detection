@@ -6,8 +6,9 @@ import { CircleX } from "lucide-react";
 export default function FaceImage() {
   const { image } = useApp();
   const { url } = image;
-  const imgRef = useRef();
-  const canvasRef = useRef();
+  const imgRef = useRef(null);
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [detections, setDetections] = useState([]);
 
@@ -28,6 +29,11 @@ export default function FaceImage() {
     };
 
     if (imgRef.current) {
+      imgRef.current.onload = () => {
+        containerRef.current.style.height =
+          imgRef.current.clientHeight + 30 + "px";
+      };
+
       loadModels();
 
       window.addEventListener("resize", resizeCanvas);
@@ -68,9 +74,6 @@ export default function FaceImage() {
 
   useEffect(() => {
     if (!loading) {
-      document.querySelector("#image-container").style.height =
-        imgRef.current.clientHeight + 30 + "px";
-
       canvasRef.current.innerHtml = faceapi.createCanvasFromMedia(
         imgRef.current,
       );
@@ -104,7 +107,11 @@ export default function FaceImage() {
   }, [loading]);
 
   return (
-    <>
+    <div
+      style={{ height: image.height }}
+      ref={containerRef}
+      className="flex items-center justify-center relative bg-[#1b1b1b] shadow shadow-[#ffdd29] rounded-md overflow-hidden"
+    >
       {loading && (
         <div className="absolute z-20 inline-block h-20 w-20 animate-spin rounded-full border-8 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white" />
       )}
@@ -124,6 +131,6 @@ export default function FaceImage() {
         alt=""
       />
       <canvas className="absolute" ref={canvasRef} />
-    </>
+    </div>
   );
 }
